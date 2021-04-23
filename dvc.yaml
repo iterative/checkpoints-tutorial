@@ -4,9 +4,4 @@ stages:
     deps:
     - train.py
     outs:
-    - model.pt:
-        checkpoint: true
-    live:
-      dvclive:
-        summary: true
-        html: true
+    - model.pt

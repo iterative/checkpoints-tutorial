@@ -5,7 +5,6 @@ import os
 import torch
 import torch.nn.functional as F
 import torchvision
-import dvclive
 
 
 EPOCHS = 10
