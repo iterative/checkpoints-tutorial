@@ -2,3 +2,4 @@
 .dvc/
 data/
 model.pt
+predictions.json

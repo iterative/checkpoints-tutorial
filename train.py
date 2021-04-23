@@ -5,6 +5,7 @@ import os
 import torch
 import torch.nn.functional as F
 import torchvision
+import dvclive
 
 
 EPOCHS = 10
@@ -37,11 +38,12 @@ def transform(dataset):
     return x, y
 
 
-def train(model, x, y):
+def train(model, x, y, lr, weight_decay):
     """Train a single epoch."""
     model.train()
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters())
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr,
+                                 weight_decay=weight_decay)
     y_pred = model(x)
     loss = criterion(y_pred, y)
     optimizer.zero_grad()
@@ -61,6 +63,7 @@ def get_metrics(y, y_pred, y_pred_label):
     """Get loss and accuracy metrics."""
     metrics = {}
     criterion = torch.nn.CrossEntropyLoss()
+    metrics["loss"] = criterion(y_pred, y).item()
     metrics["acc"] = (y_pred_label == y).sum().item()/len(y)
     return metrics
 
@@ -69,6 +72,12 @@ def evaluate(model, x, y):
     """Evaluate model and save metrics."""
     scores = predict(model, x)
     _, labels = torch.max(scores, 1)
+    predictions = [{
+                    "actual": int(actual),
+                    "predicted": int(predicted)
+                   } for actual, predicted in zip(y, labels)]
+    with open("predictions.json", "w") as f:
+        json.dump(predictions, f)
     metrics = get_metrics(y, scores, labels)
     return metrics
 
@@ -80,10 +89,14 @@ def main():
     # Load model.
     if os.path.exists("model.pt"):
         model.load_state_dict(torch.load("model.pt"))
+    # Load params.
+    with open("params.yaml") as f:
+        params = yaml.safe_load(f)
+    torch.manual_seed(params["seed"])
     # Load train and test data.
-    mnist_train = torchvision.datasets.MNIST("data", download=True)
+    mnist_train = torchvision.datasets.MNIST("data")
     x_train, y_train = transform(mnist_train)
-    mnist_test = torchvision.datasets.MNIST("data", download=True, train=False)
+    mnist_test = torchvision.datasets.MNIST("data", train=False)
     x_test, y_test = transform(mnist_test)
     try:
         # Iterate over training epochs.
@@ -94,12 +107,12 @@ def main():
                     batch_size=512,
                     shuffle=True)
             for x_batch, y_batch in train_loader:
-                train(model, x_batch, y_batch)
+                train(model, x_batch, y_batch, params["lr"], params["weight_decay"])
             torch.save(model.state_dict(), "model.pt")
             # Evaluate and checkpoint.
             metrics = evaluate(model, x_test, y_test)
-            for metric, value in metrics.items():
-                print('Epoch %s: %s=%s'%(i, metric, value))
+            for k, v in metrics.items():
+                print('Epoch %s: %s=%s'%(i, k, v))
     except KeyboardInterrupt:
         pass
 
