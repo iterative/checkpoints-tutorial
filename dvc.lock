@@ -8,5 +8,5 @@ stages:
       size: 251
     outs:
     - path: test.data
-      md5: e92bdd0c177170492d10e859de574d8d
+      md5: 0494b13460d0b6e804ed0f5bb4ad5d23
       size: 11
