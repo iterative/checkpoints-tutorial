@@ -116,17 +116,13 @@ a `live` section to your stage output. See [dvc.yaml](dvc.yaml) for an example:
 
 ```yaml
 stages:
-  train:
-    cmd: python train.py
+  test:
+    cmd: bash test.sh
     deps:
-    - train.py
+    - test.sh
     outs:
-    - model.pt:
+    - date.out:
         checkpoint: true
-    live:
-      logs:
-        summary: true
-        html: true
 ```
 
 If you do not already have a `dvc.yaml` stage, you can use [dvc stage

@@ -1,0 +1,8 @@
+stages:
+  test:
+    cmd: bash test.sh
+    deps:
+    - test.sh
+    outs:
+    - test.out:
+        checkpoint: true
