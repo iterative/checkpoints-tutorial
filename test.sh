@@ -5,7 +5,7 @@ function checkpoint() {
 }
 
 for iteration in {1..10}; do
-    date +%s | tee test.data
+    ln -s /dev/random test.data
     checkpoint
     sleep 1
 done
