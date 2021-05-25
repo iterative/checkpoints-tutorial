@@ -4,6 +4,10 @@ function checkpoint() {
   touch "$FLAG" && while test -f "$FLAG"; do true; done
 }
 
+function push() {
+  dvc exp push origin exp-···
+}
+
 test -f test.data || echo 0 > test.data
 echo "Initial state $(cat test.data)"
 

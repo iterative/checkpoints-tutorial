@@ -4,9 +4,9 @@ stages:
     cmd: bash test.sh
     deps:
     - path: test.sh
-      md5: b907b0bab7a7e1ab33382bda1bd5ec03
-      size: 400
+      md5: 9a7f29b6e85da13ca43cc07e6b34371f
+      size: 454
     outs:
     - path: test.data
-      md5: 31d30eea8d0968d6458e0ad0027c9f80
-      size: 3
+      md5: b026324c6904b2a9cb4b88d6d61c81d1
+      size: 2
