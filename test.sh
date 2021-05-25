@@ -4,8 +4,7 @@ function checkpoint() {
   touch "$FLAG" && while test -f "$FLAG"; do true; done
 }
 
-
-for iteration in {0..100}; do
+for iteration in {1..10}; do
     date +%s | tee test.data
     checkpoint
     sleep 1
