@@ -4,5 +4,5 @@ stages:
     deps:
     - test.sh
     outs:
-    - test.out:
+    - test.data:
         checkpoint: true

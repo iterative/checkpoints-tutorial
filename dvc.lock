@@ -1,0 +1,12 @@
+schema: '2.0'
+stages:
+  test:
+    cmd: bash test.sh
+    deps:
+    - path: test.sh
+      md5: dd639c91beee4a75475a731725b03215
+      size: 251
+    outs:
+    - path: test.data
+      md5: b99a41e65742fca855af5777cb944f4f
+      size: 11
